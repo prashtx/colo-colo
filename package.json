@@ -1,0 +1,10 @@
+{
+    "name": "colo-colo",
+    "version": "0.0.1",
+    "private": true,
+    "engines" : { "node" : ">=0.6.0" },
+    "dependencies": {
+      "socket.io-client": "0.9.x",
+      "growler": "*"
+  }
+}
