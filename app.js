@@ -4,7 +4,7 @@
 var growler = require('growler');
 var io = require('socket.io-client');
 
-var server = 'http://flyingchicken.herokuapp.com';
+var server = 'http://egg-hatcher.nodester.com';
 
 if (process.env.REMOTE !== undefined) {
   server = process.env.REMOTE;
