@@ -1,8 +1,15 @@
 Colo Colo
 =========
 
-A [flying chicken](https://github.com/codeforamerica/flying_chicken) client
-that uses [Growl](http://growl.info/) to notify you of GitHub commits.
+An [Egg Hatcher](https://github.com/prashtx/egg-hatcher) client that uses
+[Growl](http://growl.info/) to notify you of GitHub commits.
+
+### Egg Hatcher
+
+Egg Hatcher is a simple server that receives egg payloads from [Flying
+Chicken](https://github.com/codeforamerica/flying_chicken) and sends messages
+to websocket clients. It runs on nodester at egg-hatcher.nodester.com, since
+nodester supports websockets.
 
 ## Usage
 
