@@ -4,6 +4,12 @@
 var growler = require('growler');
 var io = require('socket.io-client');
 
+var server = 'http://flyingchicken.herokuapp.com';
+
+if (process.env.REMOTE !== undefined) {
+  server = process.env.REMOTE;
+}
+
 var DEBUG = false;
 if (process.env.DEBUG === '1') {
   DEBUG = true;
@@ -16,6 +22,8 @@ if (DEBUG) {
   };
 }
 
+log('Using server: ' + server);
+
 var app = new growler.GrowlApplication('Colo Colo');
 app.setNotifications({
   'GitHub Commit': {}
@@ -26,8 +34,7 @@ app.register(function (success, err) {
     return;
   }
 
-  //var socket = io.connect('http://flying-chicken.herokuapp.com');
-  var socket = io.connect('http://localhost:3000');
+  var socket = io.connect(server);
   socket
   .on('connect', function () {
     // socket connected
@@ -37,15 +44,33 @@ app.register(function (success, err) {
     log('disconnected');
     // socket disconnected
   })
+  .on('error', function (err) {
+    if (err.message) {
+      console.log(err.message);
+    } else {
+      console.log(err);
+    }
+  })
+  .on('connect_failed', function () {
+    log('connect failed');
+  })
+  .on('welcome', function (data) {
+    log('welcome: ' + data.time);
+  })
+  .on('close', function (code, message) {
+    log('close. code: ' + code + ' message: ' + message);
+  })
   .on('newcommit', function (data) {
     log('New Commit');
-    log('Author: ' + data.commit.author.name);
+    log('Author: ' + data.head_commit.author.name);
     log('Repo: ' + data.repository.name);
-    log(data.commit.message);
+    log(data.head_commit.message);
     log('');
-    app.sendNotification('GitHub Commit', {
-      title: 'Commit to ' + data.repository.name,
-      text: 'by ' + data.commit.author.name + '\n' + data.commit.message
+    data.commits.forEach(function (commit) {
+      app.sendNotification('GitHub Commit', {
+        title: 'Commit to ' + data.repository.name,
+        text: 'by ' + commit.author.name + '\n' + commit.message
+      });
     });
   });
 });
